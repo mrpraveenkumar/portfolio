@@ -345,6 +345,11 @@ function Card3D({ children, className = "", ...props }: any) {
 export default function Portfolio() {
   const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState("home")
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -366,6 +371,11 @@ export default function Portfolio() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Don't render anything until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return null
+  }
 
   if (loading) {
     return <Preloader onComplete={() => setLoading(false)} />
