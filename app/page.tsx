@@ -226,7 +226,7 @@ function Navigation({ activeSection }: { activeSection: string }) {
                 onClick={() => scrollToSection(item.id)}
                 className={`text-sm font-light transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 relative ${
                   activeSection === item.id ? "text-blue-600 dark:text-blue-400" : "text-slate-600 dark:text-slate-400"
-                }`}
+                  }`}
               >
                 {item.label}
                 {activeSection === item.id && (
@@ -480,7 +480,7 @@ export default function Portfolio() {
               <p className="text-xl text-slate-600 dark:text-slate-400 font-light">Get to know me better</p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
               <Card3D>
                 <div className="p-8">
                   <Image
@@ -499,18 +499,19 @@ export default function Portfolio() {
                     I'm a dedicated Computer Science and Engineering student specializing in AI & ML at Maharana Pratap Engineering College. With a strong passion for ethical hacking and web development, I strive to create secure and intelligent solutions that make a real-world impact.
                   </p>
                   <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
-                    My tech journey began with curiosity in cybersecurity and programming, and it has grown into a mission to build innovative tools, websites, and applications. Whether it's contributing to security-focused projects, experimenting with AI models, or developing full-stack platforms, I enjoy pushing my limits through hands-on learning.                </p>
+                    My tech journey began with curiosity in cybersecurity and programming, and it has grown into a mission to build innovative tools, websites, and applications. Whether it's contributing to security-focused projects, experimenting with AI models, or developing full-stack platforms, I enjoy pushing my limits through hands-on learning.
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-6">
                   <Card3D className="p-6">
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                         <GraduationCap className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <p className="font-medium text-slate-800 dark:text-slate-200">MIT Student</p>
-                        <p className="text-sm text-slate-500 dark:text-slate-500">Class of 2025</p>
+                        <p className="font-medium text-slate-800 dark:text-slate-200">MPEC Student</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-500">Batch of 2022</p>
                       </div>
                     </div>
                   </Card3D>
@@ -522,7 +523,19 @@ export default function Portfolio() {
                       </div>
                       <div>
                         <p className="font-medium text-slate-800 dark:text-slate-200">Kanpur, UP</p>
-                        <p className="text-sm text-slate-500 dark:text-slate-500">india</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-500">India</p>
+                      </div>
+                    </div>
+                  </Card3D>
+
+                  <Card3D className="p-6">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                        <Lightbulb className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-800 dark:text-slate-200">Tech Enthusiast</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-500">Problem Solver</p>
                       </div>
                     </div>
                   </Card3D>
@@ -533,20 +546,8 @@ export default function Portfolio() {
                         <Calendar className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <p className="font-medium text-slate-800 dark:text-slate-200">Experience</p>
-                        <p className="text-sm text-slate-500 dark:text-slate-500">3+ Years</p>
-                      </div>
-                    </div>
-                  </Card3D>
-
-                  <Card3D className="p-6">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                        <Award className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-slate-800 dark:text-slate-200">Dean's List</p>
-                        <p className="text-sm text-slate-500 dark:text-slate-500">Academic Excellence</p>
+                        <p className="font-medium text-slate-800 dark:text-slate-200">Coding Journey</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-500">Since 2022</p>
                       </div>
                     </div>
                   </Card3D>
@@ -716,8 +717,8 @@ export default function Portfolio() {
                         } text-white border-0 rounded-full px-4 py-2`}
                       >
                         {new Date() > new Date('2026-05-01') ? 'Completed' : 'Pursuing'}
-                      </Badge>
-                    </div>
+                    </Badge>
+                  </div>
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-slate-600 dark:text-slate-400">
                         Aug 2022 - May 2026
