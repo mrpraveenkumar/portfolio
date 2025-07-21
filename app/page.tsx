@@ -385,7 +385,7 @@ export default function Portfolio() {
     <>
       <Head>
         <title>Praveen Kumar - Computer Engineering Student & Data Science</title>
-        <meta name="description" content="Computer Engineering student specializing in AI & ML, Data Science passionate about creating innovative solutions through elegant code." />
+        <meta name="description" content="Computer Engineering student specializing in Data Science, Data Science passionate about creating innovative solutions through elegant code." />
         
         {/* Keywords */}
         <meta name="keywords" content="Praveen Kumar, Full Stack Developer, Computer Engineering, AI ML, Web Development, Portfolio, Software Engineer, Kanpur" />
@@ -398,14 +398,14 @@ export default function Portfolio() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.praveenkumar.education/" />
         <meta property="og:title" content="Praveen Kumar - Computer Engineering Student & Data Science" />
-        <meta property="og:description" content="Computer Engineering student specializing in AI & ML, Data Science passionate about creating innovative solutions through elegant code." />
+        <meta property="og:description" content="Computer Engineering student specializing in Data Science, Data Science passionate about creating innovative solutions through elegant code." />
         <meta property="og:image" content="/developer-images/1.png" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://www.praveenkumar.education/" />
         <meta property="twitter:title" content="Praveen Kumar - Computer Engineering Student & Data Science" />
-        <meta property="twitter:description" content="Computer Engineering student specializing in AI & ML, Data Science passionate about creating innovative solutions through elegant code." />
+        <meta property="twitter:description" content="Computer Engineering student specializing in Data Science, Data Science passionate about creating innovative solutions through elegant code." />
         <meta property="twitter:image" content="/developer-images/1.png" />
         
         {/* Additional SEO tags */}
@@ -553,7 +553,7 @@ export default function Portfolio() {
                 <div className="space-y-8">
                   <div className="space-y-6">
                     <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
-                      I'm a dedicated Computer Science and Engineering student specializing in AI & ML at Maharana Pratap Engineering College. With a strong passion for ethical hacking and web development, I strive to create secure and intelligent solutions that make a real-world impact.
+                      I'm a dedicated Computer Science and Engineering student specializing in Data Science at Maharana Pratap Engineering College. With a strong passion for ethical hacking and web development, I strive to create secure and intelligent solutions that make a real-world impact.
                     </p>
                     <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
                       My tech journey began with curiosity in cybersecurity and programming, and it has grown into a mission to build innovative tools, websites, and applications. Whether it's contributing to security-focused projects, experimenting with AI models, or developing full-stack platforms, I enjoy pushing my limits through hands-on learning.
