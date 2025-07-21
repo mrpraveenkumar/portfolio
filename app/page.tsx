@@ -384,8 +384,8 @@ export default function Portfolio() {
   return (
     <>
       <Head>
-        <title>Praveen Kumar - Computer Engineering Student & Full-Stack Developer</title>
-        <meta name="description" content="Computer Engineering student specializing in AI & ML, Full-Stack Developer passionate about creating innovative solutions through elegant code." />
+        <title>Praveen Kumar - Computer Engineering Student & Data Science</title>
+        <meta name="description" content="Computer Engineering student specializing in AI & ML, Data Science passionate about creating innovative solutions through elegant code." />
         
         {/* Keywords */}
         <meta name="keywords" content="Praveen Kumar, Full Stack Developer, Computer Engineering, AI ML, Web Development, Portfolio, Software Engineer, Kanpur" />
@@ -397,15 +397,15 @@ export default function Portfolio() {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.praveenkumar.education/" />
-        <meta property="og:title" content="Praveen Kumar - Computer Engineering Student & Full-Stack Developer" />
-        <meta property="og:description" content="Computer Engineering student specializing in AI & ML, Full-Stack Developer passionate about creating innovative solutions through elegant code." />
+        <meta property="og:title" content="Praveen Kumar - Computer Engineering Student & Data Science" />
+        <meta property="og:description" content="Computer Engineering student specializing in AI & ML, Data Science passionate about creating innovative solutions through elegant code." />
         <meta property="og:image" content="/developer-images/1.png" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://www.praveenkumar.education/" />
-        <meta property="twitter:title" content="Praveen Kumar - Computer Engineering Student & Full-Stack Developer" />
-        <meta property="twitter:description" content="Computer Engineering student specializing in AI & ML, Full-Stack Developer passionate about creating innovative solutions through elegant code." />
+        <meta property="twitter:title" content="Praveen Kumar - Computer Engineering Student & Data Science" />
+        <meta property="twitter:description" content="Computer Engineering student specializing in AI & ML, Data Science passionate about creating innovative solutions through elegant code." />
         <meta property="twitter:image" content="/developer-images/1.png" />
         
         {/* Additional SEO tags */}
@@ -459,7 +459,7 @@ export default function Portfolio() {
                 </h1>
 
                 <p className="text-2xl md:text-3xl text-slate-600 dark:text-slate-400 font-light">
-                  Computer Engineering Student & Full-Stack Developer
+                  Computer Engineering Student & Data Science
                 </p>
 
                 <p className="text-lg text-slate-500 dark:text-slate-500 max-w-3xl mx-auto leading-relaxed font-light">
