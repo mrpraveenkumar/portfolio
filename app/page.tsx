@@ -30,6 +30,14 @@ import {
   Award,
   Zap,
   ArrowRight,
+  Shield,
+  Cloud,
+  BarChart,
+  Cpu,
+  Trophy,
+  Clock,
+  FileText,
+  Brain,
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import Image from "next/image"
@@ -91,17 +99,69 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 // Navigation Component with Apple-style glass morphism
 function Navigation({ activeSection }: { activeSection: string }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    const handleScroll = () => {
+      // Calculate scroll percentage relative to viewport height
+      const scrollPosition = window.scrollY
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercentage = (scrollPosition / windowHeight) * 100
+
+      // Set scroll progress based on percentage thresholds
+      if (scrollPercentage <= 5) {
+        setScrollProgress(0) // No reduction
+      } else if (scrollPercentage <= 10) {
+        setScrollProgress(1) // 10% reduction
+      } else if (scrollPercentage <= 15) {
+        setScrollProgress(2) // 15% reduction
+      } else {
+        setScrollProgress(3) // 30% reduction
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const getNavWidth = () => {
+    switch (scrollProgress) {
+      case 0:
+        return 'w-[95%]'
+      case 1:
+        return 'w-[85%]' // 10% reduction
+      case 2:
+        return 'w-[80%]' // 15% reduction
+      case 3:
+        return 'w-[65%]' // 30% reduction
+      default:
+        return 'w-[95%]'
+    }
+  }
+
+  const getNavHeight = () => {
+    switch (scrollProgress) {
+      case 0:
+        return 'h-16 px-6'
+      case 1:
+        return 'h-14 px-5'
+      case 2:
+        return 'h-12 px-4'
+      case 3:
+        return 'h-12 px-4'
+      default:
+        return 'h-16 px-6'
+    }
+  }
 
   const navItems = [
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "experience", label: "Experience" },
+    { id: "certifications", label: "Certifications" },
     { id: "skills", label: "Skills" },
     { id: "projects", label: "Projects" },
     { id: "interests", label: "Interests" },
@@ -122,8 +182,8 @@ function Navigation({ activeSection }: { activeSection: string }) {
         <div className="bg-white/80 backdrop-blur-xl border border-slate-200/50 rounded-2xl shadow-xl shadow-slate-900/5">
           <div className="flex items-center justify-between h-16 px-6">
             <div className="font-light text-xl">
-              <span className="text-blue-600 font-medium">Alex</span>
-              <span className="text-slate-700 ml-1">Johnson</span>
+              <span className="text-blue-600 font-medium">Praveen</span>
+              <span className="text-slate-700 ml-1">Kumar</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
@@ -150,12 +210,12 @@ function Navigation({ activeSection }: { activeSection: string }) {
   }
 
   return (
-    <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-4xl px-4">
+    <nav className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-40 transition-all duration-700 ease-in-out ${getNavWidth()}`}>
       <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-xl shadow-slate-900/5 dark:shadow-slate-900/20">
-        <div className="flex items-center justify-between h-16 px-6">
-          <div className="font-light text-xl">
-            <span className="text-blue-600 dark:text-blue-400 font-medium">Alex</span>
-            <span className="text-slate-700 dark:text-slate-300 ml-1">Johnson</span>
+        <div className={`flex items-center justify-between transition-all duration-700 ease-in-out ${getNavHeight()}`}>
+          <div className={`font-light transition-all duration-700 ${scrollProgress > 0 ? 'text-lg' : 'text-xl'}`}>
+            <span className="text-blue-600 dark:text-blue-400 font-medium">Praveen</span>
+            <span className="text-slate-700 dark:text-slate-300 ml-1">Kumar</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -227,9 +287,9 @@ function Navigation({ activeSection }: { activeSection: string }) {
                 onClick={() => scrollToSection(item.id)}
                 className={`block w-full text-left py-3 text-sm font-light transition-colors ${
                   activeSection === item.id
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
-                }`}
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
+                  }`}
               >
                 {item.label}
               </button>
@@ -288,7 +348,7 @@ export default function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "experience", "skills", "projects", "interests", "contact"]
+      const sections = ["home", "about", "experience", "certifications", "skills", "projects", "interests", "contact"]
       const scrollPosition = window.scrollY + 200
 
       for (const section of sections) {
@@ -323,8 +383,8 @@ export default function Portfolio() {
               <div className="w-40 h-40 mx-auto mb-8 relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
                 <Image
-                  src="/placeholder.svg?height=160&width=160"
-                  alt="Alex Johnson"
+                  src="/developer-images/1.png?height=160&width=160"
+                  alt="Praveen Kumar"
                   width={160}
                   height={160}
                   className="relative rounded-full border-4 border-white/50 dark:border-slate-700/50 shadow-2xl"
@@ -337,7 +397,7 @@ export default function Portfolio() {
               <h1 className="text-5xl md:text-7xl font-light text-slate-800 dark:text-slate-100 leading-tight">
                 Hi, I'm{" "}
                 <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent font-medium">
-                  Alex Johnson
+                  Praveen Kumar
                 </span>
               </h1>
 
@@ -366,7 +426,14 @@ export default function Portfolio() {
                   className="border-2 border-slate-300 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 rounded-full px-8 py-6 text-lg font-light bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-800 transition-all duration-300 hover:scale-105"
                 >
                   <Download className="mr-2 h-5 w-5" />
-                  Download Resume
+                  <a
+                    href="https://drive.google.com/uc?export=download&id=1FfdSgxjxqS-eZaYPNcIXxaGEGbxEQs_A"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="no-underline text-inherit"
+                  >
+                    Download Resume
+                  </a>
                 </Button>
               </div>
 
@@ -376,21 +443,27 @@ export default function Portfolio() {
                   size="icon"
                   className="rounded-full w-12 h-12 hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-110 transition-all duration-300"
                 >
+                  <a href="https://github.com/mrpraveenkumar" target="_blank" rel="noopener noreferrer">
                   <Github className="h-6 w-6" />
+                  </a>
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   className="rounded-full w-12 h-12 hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-110 transition-all duration-300"
                 >
+                  <a href="https://www.linkedin.com/in/mr-praveenkumar/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="h-6 w-6" />
+                  </a>
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   className="rounded-full w-12 h-12 hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-110 transition-all duration-300"
                 >
+                  <a href="mailto:praveenkumar1202398@gmail.com">
                   <Mail className="h-6 w-6" />
+                  </a>
                 </Button>
               </div>
             </div>
@@ -411,7 +484,7 @@ export default function Portfolio() {
               <Card3D>
                 <div className="p-8">
                   <Image
-                    src="/placeholder.svg?height=500&width=500"
+                    src="/developer-images/2.png?height=500&width=500"
                     alt="About me"
                     width={500}
                     height={500}
@@ -423,14 +496,10 @@ export default function Portfolio() {
               <div className="space-y-8">
                 <div className="space-y-6">
                   <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
-                    I'm a passionate Computer Engineering student at MIT with a love for creating innovative solutions
-                    through technology. My journey in programming started in high school, and since then, I've been
-                    constantly learning and building projects that solve real-world problems.
+                    I'm a dedicated Computer Science and Engineering student specializing in AI & ML at Maharana Pratap Engineering College. With a strong passion for ethical hacking and web development, I strive to create secure and intelligent solutions that make a real-world impact.
                   </p>
                   <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
-                    When I'm not coding, you can find me exploring new technologies, contributing to open-source
-                    projects, or working on personal projects that challenge my skills and creativity.
-                  </p>
+                    My tech journey began with curiosity in cybersecurity and programming, and it has grown into a mission to build innovative tools, websites, and applications. Whether it's contributing to security-focused projects, experimenting with AI models, or developing full-stack platforms, I enjoy pushing my limits through hands-on learning.                </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-6">
@@ -452,8 +521,8 @@ export default function Portfolio() {
                         <MapPin className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <p className="font-medium text-slate-800 dark:text-slate-200">Boston, MA</p>
-                        <p className="text-sm text-slate-500 dark:text-slate-500">United States</p>
+                        <p className="font-medium text-slate-800 dark:text-slate-200">Kanpur, UP</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-500">india</p>
                       </div>
                     </div>
                   </Card3D>
@@ -503,35 +572,59 @@ export default function Portfolio() {
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-start space-x-4">
                       <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
-                        <Briefcase className="h-8 w-8 text-white" />
+                        <Code className="h-8 w-8 text-white" />
                       </div>
                       <div>
                         <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">
-                          Software Engineering Intern
+                          Problem Solving & Competitive Programming
                         </h3>
-                        <p className="text-lg text-slate-600 dark:text-slate-400">Google • Summer 2024</p>
+                        <p className="text-lg text-slate-600 dark:text-slate-400">Self-Initiated Learning • Ongoing</p>
                       </div>
                     </div>
                     <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 rounded-full px-4 py-2">
-                      Internship
+                      Fresher
                     </Badge>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                    Worked on the Chrome team to improve web performance metrics and user experience. Developed features
-                    using C++ and JavaScript that impacted millions of users worldwide.
-                  </p>
+                  <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2"></div>
+                      <p>Solved 150+ data structure and algorithm problems on LeetCode, focusing on optimization and efficient solutions.</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2"></div>
+                      <p>Practiced over 30+ problems on GeeksforGeeks, strengthening fundamental algorithm concepts.</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2"></div>
+                      <p>Actively participated in CodeChef contests to improve problem-solving speed and accuracy.</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2"></div>
+                      <p>Enhanced programming skills through 100+ challenges on HackerRank, earning Achievements in domains like Problem Solving, Python, and SQL.</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2"></div>
+                      <p>Strengthened debugging, time complexity analysis, and real-world algorithm implementation skills.</p>
+                    </div>
+                  </div>
                   <div className="flex flex-wrap gap-3">
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      C++
+                      LeetCode
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      JavaScript
+                      GeeksforGeeks
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      Chrome DevTools
+                      CodeChef
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      Performance
+                      HackerRank
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      DSA
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      Algorithms
                     </Badge>
                   </div>
                 </div>
@@ -542,37 +635,49 @@ export default function Portfolio() {
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-start space-x-4">
                       <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center">
-                        <Code className="h-8 w-8 text-white" />
+                        <Trophy className="h-8 w-8 text-white" />
                       </div>
                       <div>
                         <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">
-                          Full-Stack Developer
+                          Achievements & Certifications
                         </h3>
-                        <p className="text-lg text-slate-600 dark:text-slate-400">
-                          TechStart Inc. • Part-time (2023-2024)
-                        </p>
+                        <p className="text-lg text-slate-600 dark:text-slate-400">Online Learning Platforms</p>
                       </div>
                     </div>
                     <Badge variant="outline" className="rounded-full px-4 py-2 border-slate-300 dark:border-slate-600">
-                      Part-time
+                      Ongoing
                     </Badge>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                    Built and maintained web applications using React, Node.js, and PostgreSQL. Collaborated with
-                    designers and product managers to deliver user-centric solutions.
-                  </p>
+                  <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2"></div>
+                      <p>Problem Solving (Basic) Certificate from HackerRank</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2"></div>
+                      <p>Python Programming Certificate from HackerRank</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2"></div>
+                      <p>SQL (Basic) Certificate from HackerRank</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2"></div>
+                      <p>Consistent problem solver with daily practice commitment</p>
+                    </div>
+                  </div>
                   <div className="flex flex-wrap gap-3">
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      React
+                      Problem Solving
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      Node.js
+                      Python
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      PostgreSQL
+                      SQL
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      AWS
+                      Certifications
                     </Badge>
                   </div>
                 </div>
@@ -586,30 +691,226 @@ export default function Portfolio() {
                         <GraduationCap className="h-8 w-8 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Research Assistant</h3>
-                        <p className="text-lg text-slate-600 dark:text-slate-400">MIT AI Lab • 2023-Present</p>
+                        <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Education</h3>
+                        <p className="text-lg text-slate-600 dark:text-slate-400">Academic Background</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bachelor's Degree */}
+                  <div className="space-y-6 mb-8">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="text-xl font-medium text-slate-800 dark:text-slate-200">
+                          Bachelor of Technology in Data Science
+                        </h4>
+                        <p className="text-slate-600 dark:text-slate-400">
+                          Maharana Pratap Engineering College, Kanpur
+                        </p>
+                      </div>
+                      <Badge 
+                        className={`${
+                          new Date() > new Date('2026-05-01') 
+                            ? 'bg-green-500' 
+                            : 'bg-blue-500'
+                        } text-white border-0 rounded-full px-4 py-2`}
+                      >
+                        {new Date() > new Date('2026-05-01') ? 'Completed' : 'Pursuing'}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-600 dark:text-slate-400">
+                        Aug 2022 - May 2026
+                      </span>
+                      <span className="text-slate-600 dark:text-slate-400 font-medium">
+                        CGPA: 8.09
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Intermediate */}
+                  <div className="space-y-4 mb-8 border-t border-slate-200 dark:border-slate-700 pt-8">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="text-xl font-medium text-slate-800 dark:text-slate-200">
+                          Intermediate (XII)
+                        </h4>
+                        <p className="text-slate-600 dark:text-slate-400">
+                          Pt Deendayal Inter College, Chikasi Hamirpur
+                        </p>
+                      </div>
+                      <Badge 
+                        className="bg-green-500 text-white border-0 rounded-full px-4 py-2"
+                      >
+                        Completed
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-600 dark:text-slate-400">
+                        Completed March 2022
+                      </span>
+                      <span className="text-slate-600 dark:text-slate-400 font-medium">
+                        Percentage: 77%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* High School */}
+                  <div className="space-y-4 border-t border-slate-200 dark:border-slate-700 pt-8">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="text-xl font-medium text-slate-800 dark:text-slate-200">
+                          High School (X)
+                        </h4>
+                        <p className="text-slate-600 dark:text-slate-400">
+                          Pt Deendayal Inter College, Chikasi Hamirpur
+                        </p>
+                      </div>
+                      <Badge 
+                        className="bg-green-500 text-white border-0 rounded-full px-4 py-2"
+                      >
+                        Completed
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-600 dark:text-slate-400">
+                        Completed March 2020
+                      </span>
+                      <span className="text-slate-600 dark:text-slate-400 font-medium">
+                        Percentage: 87%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 mt-8">
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      Data Science
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      B.Tech
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      Computer Science
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      Academic Excellence
+                    </Badge>
+                  </div>
+                </div>
+              </Card3D>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Certifications Section */}
+      <section id="certifications" className="py-32">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-light text-slate-800 dark:text-slate-100 mb-6">Certifications</h2>
+              <p className="text-xl text-slate-600 dark:text-slate-400 font-light">Professional development and achievements</p>
+            </div>
+
+            <div className="space-y-8">
+              <Card3D>
+                <div className="p-8">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                        <Award className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">
+                          HTML & CSS Bootcamp
+                        </h3>
+                        <p className="text-lg text-slate-600 dark:text-slate-400">
+                          LetsUpgrade, in collaboration with NSDC, GDG MAD & ITM Edutech Training Pvt. Ltd.
+                        </p>
+                      </div>
+                    </div>
+                    <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 rounded-full px-4 py-2">
+                      3 Days
+                    </Badge>
+                  </div>
+                  <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-6">
+                    <div className="flex items-center space-x-3">
+                      <Calendar className="h-5 w-5 text-blue-500" />
+                      <p>Duration: 6 Jan 2025 – 8 Jan 2025</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Clock className="h-5 w-5 text-blue-500" />
+                      <p>Issued on: 24 Jan 2025</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <FileText className="h-5 w-5 text-blue-500" />
+                      <p>Certificate No.: LUEHTMLJAN1252774</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <ExternalLink className="h-5 w-5 text-blue-500" />
+                      <a 
+                        href="https://verify.letsupgrade.in/certificate/LUEHTMLJAN1252774"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:text-blue-600 transition-colors"
+                      >
+                        Verify Certificate
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      HTML
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      CSS
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
+                      Web Development
+                    </Badge>
+                  </div>
+                </div>
+              </Card3D>
+
+              <Card3D>
+                <div className="p-8">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center">
+                        <Brain className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">
+                          Artificial Intelligence Workshop
+                        </h3>
+                        <p className="text-lg text-slate-600 dark:text-slate-400">
+                          Techkriti'25, IIT Kanpur
+                        </p>
                       </div>
                     </div>
                     <Badge variant="outline" className="rounded-full px-4 py-2 border-slate-300 dark:border-slate-600">
-                      Research
+                      Workshop
                     </Badge>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                    Conducting research on machine learning algorithms for computer vision applications. Published 2
-                    papers in peer-reviewed conferences.
-                  </p>
+                  <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-6">
+                    <div className="flex items-center space-x-3">
+                      <MapPin className="h-5 w-5 text-green-500" />
+                      <p>IIT Kanpur</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Award className="h-5 w-5 text-green-500" />
+                      <p>Issued by: Techkriti'25</p>
+                    </div>
+                  </div>
                   <div className="flex flex-wrap gap-3">
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      Python
+                      Artificial Intelligence
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      TensorFlow
+                      Machine Learning
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      Computer Vision
-                    </Badge>
-                    <Badge variant="secondary" className="rounded-full px-4 py-2 bg-slate-100 dark:bg-slate-800">
-                      Research
+                      Workshop
                     </Badge>
                   </div>
                 </div>
@@ -635,42 +936,54 @@ export default function Portfolio() {
                     <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
                       <Code className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Frontend</h3>
+                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Programming</h3>
                   </div>
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">React/Next.js</span>
-                        <span className="text-slate-500 dark:text-slate-500">90%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Python</span>
+                        <span className="text-slate-500 dark:text-slate-500">50%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                          style={{ width: "90%" }}
+                          style={{ width: "50%" }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">TypeScript</span>
-                        <span className="text-slate-500 dark:text-slate-500">85%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">C/C++</span>
+                        <span className="text-slate-500 dark:text-slate-500">80%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                          style={{ width: "85%" }}
+                          style={{ width: "80%" }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">Tailwind CSS</span>
-                        <span className="text-slate-500 dark:text-slate-500">95%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Docker</span>
+                        <span className="text-slate-500 dark:text-slate-500">20%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                          style={{ width: "95%" }}
+                          style={{ width: "20%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-3">
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Kubernetes</span>
+                        <span className="text-slate-500 dark:text-slate-500">20%</span>
+                      </div>
+                      <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                          style={{ width: "20%" }}
                         ></div>
                       </div>
                     </div>
@@ -682,44 +995,56 @@ export default function Portfolio() {
                 <div className="p-8">
                   <div className="flex items-center space-x-4 mb-8">
                     <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center">
-                      <Zap className="h-8 w-8 text-white" />
+                      <BarChart className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Backend</h3>
+                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Data Visualization</h3>
                   </div>
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">Node.js</span>
-                        <span className="text-slate-500 dark:text-slate-500">88%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Excel</span>
+                        <span className="text-slate-500 dark:text-slate-500">50%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-green-500 to-teal-500 rounded-full"
-                          style={{ width: "88%" }}
+                          style={{ width: "50%" }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">Python</span>
-                        <span className="text-slate-500 dark:text-slate-500">92%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">PowerPoint</span>
+                        <span className="text-slate-500 dark:text-slate-500">90%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-green-500 to-teal-500 rounded-full"
-                          style={{ width: "92%" }}
+                          style={{ width: "90%" }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">PostgreSQL</span>
-                        <span className="text-slate-500 dark:text-slate-500">80%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Power BI</span>
+                        <span className="text-slate-500 dark:text-slate-500">30%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-green-500 to-teal-500 rounded-full"
-                          style={{ width: "80%" }}
+                          style={{ width: "30%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-3">
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Word</span>
+                        <span className="text-slate-500 dark:text-slate-500">90%</span>
+                      </div>
+                      <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-green-500 to-teal-500 rounded-full"
+                          style={{ width: "90%" }}
                         ></div>
                       </div>
                     </div>
@@ -731,44 +1056,56 @@ export default function Portfolio() {
                 <div className="p-8">
                   <div className="flex items-center space-x-4 mb-8">
                     <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center">
-                      <Lightbulb className="h-8 w-8 text-white" />
+                      <Cpu className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Tools</h3>
+                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Computer Fundamentals</h3>
                   </div>
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">AWS/Cloud</span>
-                        <span className="text-slate-500 dark:text-slate-500">75%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">AI/ML</span>
+                        <span className="text-slate-500 dark:text-slate-500">20%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                          style={{ width: "75%" }}
+                          style={{ width: "20%" }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">Docker</span>
-                        <span className="text-slate-500 dark:text-slate-500">70%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Cloud Computing</span>
+                        <span className="text-slate-500 dark:text-slate-500">40%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                          style={{ width: "70%" }}
+                          style={{ width: "40%" }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-3">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">Git/GitHub</span>
-                        <span className="text-slate-500 dark:text-slate-500">95%</span>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Computer Networks</span>
+                        <span className="text-slate-500 dark:text-slate-500">50%</span>
                       </div>
                       <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                          style={{ width: "95%" }}
+                          style={{ width: "50%" }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-3">
+                        <span className="text-slate-700 dark:text-slate-300 font-medium">Operating Systems</span>
+                        <span className="text-slate-500 dark:text-slate-500">50%</span>
+                      </div>
+                      <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                          style={{ width: "50%" }}
                         ></div>
                       </div>
                     </div>
@@ -793,8 +1130,8 @@ export default function Portfolio() {
               <Card3D className="group">
                 <div className="overflow-hidden rounded-t-3xl">
                   <Image
-                    src="/placeholder.svg?height=250&width=400"
-                    alt="E-commerce Platform"
+                    src="/developer-images/Projects/w3forcast.png"
+                    alt="W3FORCAST - Weather Prediction Website"
                     width={400}
                     height={250}
                     className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
@@ -802,37 +1139,32 @@ export default function Portfolio() {
                 </div>
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">E-commerce Platform</h3>
+                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">W3FORCAST</h3>
                     <div className="flex space-x-2">
                       <Button
                         variant="ghost"
                         size="icon"
                         className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
                       >
-                        <Github className="h-5 w-5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
-                      >
+                        <a href="https://w3forcast.vercel.app/" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-5 w-5" />
+                        </a>
                       </Button>
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                    Full-stack e-commerce platform with payment integration, admin dashboard, and real-time inventory
-                    management.
+                    Advanced weather prediction and forecast platform powered by AI. Features real-time weather updates, 
+                    5-day forecasts, and machine learning-based weather predictions with an intuitive interface.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
                       Next.js
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      Stripe
+                      Weather API
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      PostgreSQL
+                      TailwindCSS
                     </Badge>
                   </div>
                 </div>
@@ -841,8 +1173,8 @@ export default function Portfolio() {
               <Card3D className="group">
                 <div className="overflow-hidden rounded-t-3xl">
                   <Image
-                    src="/placeholder.svg?height=250&width=400"
-                    alt="AI Chat Application"
+                    src="/developer-images/Projects/codehex.png"
+                    alt="CODEHEX - Tech Blog Website"
                     width={400}
                     height={250}
                     className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
@@ -850,36 +1182,32 @@ export default function Portfolio() {
                 </div>
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">AI Chat Application</h3>
+                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">CODEHEX</h3>
                     <div className="flex space-x-2">
                       <Button
                         variant="ghost"
                         size="icon"
                         className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
                       >
-                        <Github className="h-5 w-5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
-                      >
+                        <a href="https://codehex-beta.vercel.app/" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-5 w-5" />
+                        </a>
                       </Button>
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                    Real-time chat application with AI-powered responses, file sharing, and group chat functionality.
+                    Modern tech blog platform built with Next.js, featuring a sleek design, dynamic content loading, 
+                    and comprehensive coverage of programming and technology topics.
                   </p>
                   <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
+                      Next.js
+                    </Badge>
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
                       React
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      Socket.io
-                    </Badge>
-                    <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      OpenAI
+                      TypeScript
                     </Badge>
                   </div>
                 </div>
@@ -888,8 +1216,8 @@ export default function Portfolio() {
               <Card3D className="group">
                 <div className="overflow-hidden rounded-t-3xl">
                   <Image
-                    src="/placeholder.svg?height=250&width=400"
-                    alt="Task Management App"
+                    src="/developer-images/Projects/portfolio.png"
+                    alt="Personal Portfolio Website"
                     width={400}
                     height={250}
                     className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
@@ -897,37 +1225,32 @@ export default function Portfolio() {
                 </div>
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Task Management App</h3>
+                    <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200">Portfolio</h3>
                     <div className="flex space-x-2">
                       <Button
                         variant="ghost"
                         size="icon"
                         className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
                       >
-                        <Github className="h-5 w-5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
-                      >
+                        <a href="https://mrpraveenkumar.vercel.app/" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-5 w-5" />
+                        </a>
                       </Button>
                     </div>
                   </div>
                   <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                    Collaborative task management application with drag-and-drop functionality and team collaboration
-                    features.
+                    Personal portfolio website showcasing my projects and skills. Features a modern UI, smooth animations, 
+                    dark mode support, and responsive design across all devices.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      Vue.js
+                      Next.js
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      Node.js
+                      TailwindCSS
                     </Badge>
                     <Badge variant="secondary" className="rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800">
-                      MongoDB
+                      Framer Motion
                     </Badge>
                   </div>
                 </div>
@@ -949,12 +1272,12 @@ export default function Portfolio() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <Card3D className="text-center">
                 <div className="p-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                    <Code className="h-10 w-10 text-white" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <Award className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Open Source</h3>
+                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Hackathons</h3>
                   <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Contributing to open source projects and building tools that help the developer community.
+                    Passionate about participating in hackathons to solve real-world problems, innovate new solutions, and collaborate with fellow developers.
                   </p>
                 </div>
               </Card3D>
@@ -966,20 +1289,43 @@ export default function Portfolio() {
                   </div>
                   <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Machine Learning</h3>
                   <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Exploring AI and ML applications, particularly in computer vision and natural language processing.
+                    Exploring AI and ML applications, with a focus on deep learning, neural networks, and practical implementations in real-world scenarios.
                   </p>
                 </div>
               </Card3D>
 
               <Card3D className="text-center">
                 <div className="p-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                    <Heart className="h-10 w-10 text-white" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <Code className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Photography</h3>
+                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Data Structures</h3>
                   <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Capturing moments and exploring the world through the lens, with a focus on landscape and street
-                    photography.
+                    Passionate about algorithmic problem-solving and implementing efficient data structures to optimize software performance.
+                  </p>
+                </div>
+              </Card3D>
+
+              <Card3D className="text-center">
+                <div className="p-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <Shield className="h-10 w-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Cyber Security</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Dedicated to understanding and implementing security best practices, ethical hacking, and protecting digital assets from cyber threats.
+                  </p>
+                </div>
+              </Card3D>
+
+              <Card3D className="text-center">
+                <div className="p-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <Github className="h-10 w-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Open Source</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Contributing to open source projects and building tools that help the developer community grow and innovate together.
                   </p>
                 </div>
               </Card3D>
@@ -987,37 +1333,11 @@ export default function Portfolio() {
               <Card3D className="text-center">
                 <div className="p-8">
                   <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                    <Zap className="h-10 w-10 text-white" />
+                    <Cloud className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Robotics</h3>
+                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Cloud Computing</h3>
                   <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Building and programming robots, participating in competitions and exploring automation
-                    technologies.
-                  </p>
-                </div>
-              </Card3D>
-
-              <Card3D className="text-center">
-                <div className="p-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                    <User className="h-10 w-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Mentoring</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Teaching and mentoring junior students in programming and helping them start their tech journey.
-                  </p>
-                </div>
-              </Card3D>
-
-              <Card3D className="text-center">
-                <div className="p-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                    <Award className="h-10 w-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-200 mb-4">Hackathons</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Participating in hackathons and coding competitions to challenge myself and build innovative
-                    solutions.
+                    Exploring cloud technologies and platforms to build scalable, reliable, and efficient cloud-native applications.
                   </p>
                 </div>
               </Card3D>
@@ -1049,7 +1369,11 @@ export default function Portfolio() {
                         </div>
                         <div>
                           <p className="font-medium text-slate-800 dark:text-slate-200">Email</p>
-                          <p className="text-slate-600 dark:text-slate-400">alex.johnson@mit.edu</p>
+                          <p className="text-slate-600 dark:text-slate-400">
+                            <a href="mailto:praveenkumar1202398@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                              praveenkumar1202398@gmail.com
+                            </a>
+                          </p>
                         </div>
                       </div>
                     </Card3D>
@@ -1061,7 +1385,7 @@ export default function Portfolio() {
                         </div>
                         <div>
                           <p className="font-medium text-slate-800 dark:text-slate-200">Phone</p>
-                          <p className="text-slate-600 dark:text-slate-400">+1 (555) 123-4567</p>
+                          <p className="text-slate-600 dark:text-slate-400">+91 74609 62164</p>
                         </div>
                       </div>
                     </Card3D>
@@ -1073,7 +1397,7 @@ export default function Portfolio() {
                         </div>
                         <div>
                           <p className="font-medium text-slate-800 dark:text-slate-200">Location</p>
-                          <p className="text-slate-600 dark:text-slate-400">Boston, MA</p>
+                          <p className="text-slate-600 dark:text-slate-400">Kanpur, UP</p>
                         </div>
                       </div>
                     </Card3D>
@@ -1088,21 +1412,27 @@ export default function Portfolio() {
                       size="icon"
                       className="rounded-full w-14 h-14 border-2 hover:scale-110 transition-all duration-300 bg-transparent"
                     >
+                      <a href="https://github.com/mrpraveenkumar" target="_blank" rel="noopener noreferrer">
                       <Github className="h-6 w-6" />
+                      </a>
                     </Button>
                     <Button
                       variant="outline"
                       size="icon"
                       className="rounded-full w-14 h-14 border-2 hover:scale-110 transition-all duration-300 bg-transparent"
                     >
+                      <a href="https://www.linkedin.com/in/mr-praveenkumar/" target="_blank" rel="noopener noreferrer">
                       <Linkedin className="h-6 w-6" />
+                      </a>
                     </Button>
                     <Button
                       variant="outline"
                       size="icon"
                       className="rounded-full w-14 h-14 border-2 hover:scale-110 transition-all duration-300 bg-transparent"
                     >
+                      <a href="mailto:praveenkumar1202398@gmail.com">
                       <Mail className="h-6 w-6" />
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -1188,7 +1518,7 @@ export default function Portfolio() {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <p className="text-slate-500 dark:text-slate-500 font-light">
-              © {new Date().getFullYear()} Alex Johnson. Crafted with passion using Next.js and Tailwind CSS.
+              © {new Date().getFullYear()} Praveen Kumar. Crafted with passion using Next.js and Tailwind CSS.
             </p>
           </div>
         </div>
